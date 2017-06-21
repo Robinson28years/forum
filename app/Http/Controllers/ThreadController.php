@@ -23,9 +23,15 @@ class ThreadController extends Controller
           $channelId = Channel::where('slug', $channelSlug)->first()->id;
           $threads = Thread::where('channel_id', $channelId)->latest()->get();
         }else {
-          $threads = Thread::latest()->get();
+          $threads = Thread::latest();
         }
 
+        if ($username = request('by')) {
+            $user = \App\User::where('name', $username)->firstOrFail();
+
+            $threads->where('user_id', $user->id);
+        }
+        $threads = $threads->get();
         return view('threads.index', compact('threads'));
     }
 
@@ -47,10 +53,10 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($reques, [
+        $this->validate($request, [
           'title' => 'required',
           'body' => 'required',
-          'channel_id' => 'required|exists:channels.id'
+          'channel_id' => 'required'
         ]);
         $thread = Thread::create([
           'user_id' => auth()->id(),

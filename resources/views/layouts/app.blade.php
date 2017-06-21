@@ -39,15 +39,28 @@
                         <li><a href="/threads">全部帖子</a></li>
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Java
+                            浏览
                             <b class="caret"></b>
                           </a>
                           <ul class="dropdown-menu">
-                            @foreach (App\Channel::all() as $channel)
+                            <li><a href="/threads">全部帖子</a></li>
+                            @if (auth()->check())
+                              <li><a href="/threads?by={{ auth()->user()->name }}">我发布的帖子</a></li>
+                            @endif
+                          </ul>
+                        </li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            栏目
+                            <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu">
+                            @foreach ($channels as $channel)
                               <li><a href="/threads/{{ $channel->slug }}">{{ $channel->name}}</a></li>
                             @endforeach
                           </ul>
                         </li>
+                        <li><a href="/threads/create">新的帖子</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
