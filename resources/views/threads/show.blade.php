@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">{{ $thread->title }}</div>
 
@@ -13,8 +13,11 @@
             </div>
         </div>
 
-        <div class="col-md-8 col-md-offset-2">
-            @foreach($thread->replies as $reply)
+        <div class="col-md-8">
+          {{-- @php
+            $replies = $thread->replies()->paginate(1);
+          @endphp --}}
+            @foreach($replies as $reply)
             <div class="panel panel-default">
                 <div class="panel-heading">
                   {{$reply->owner->name}} said  {{$reply->created_at->diffForHumans()}}
@@ -25,11 +28,12 @@
                 </div>
             </div>
           @endforeach
+          {{$replies->links()}}
 
         </div>
 
         @if (auth()->check())
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8">
             <div class="row">
               <div class="col-md-8 col-md-offset-2">
                 <form action="{{$thread->path().'/replies'}}" method="POST">
@@ -42,6 +46,15 @@
             </div>
         </div>
         @endif
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <p>
+            这篇帖子发布于{{$thread->created_at->diffForHumans()}}
+          </p>
+        </div>
+      </div>
     </div>
 </div>
 @endsection
