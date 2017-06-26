@@ -96,6 +96,8 @@
         </nav>
 
         @yield('content')
+        {{-- <flash message="Temporary message"></flash> --}}
+        <example></example>
     </div>
 
     <!-- Scripts -->
